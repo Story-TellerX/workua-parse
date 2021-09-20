@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-from writers import TxtWriter, CSVWriter, DBWriter
+from writers import TxtWriter, CSVWriter, DBWriter, JSONWriter
 
 ROOT = 'https://www.work.ua'
 
@@ -76,8 +76,8 @@ while True:
         }
         for writer in writers_list:
             writer.write(job_info)
-        print(job_info["job_description"])
-        print(type(job_info["job_description"]))
 
         # file.write(f"{job_info['href']} {job_info['title']} {job_info['id']}\n")
         # result.append(job_info)
+JSONwr = JSONWriter()
+JSONwr.get_json_data()

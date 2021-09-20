@@ -53,7 +53,7 @@ class DBWriter:
         con.close()
 
 
-
+# Almost perfect JSON writer has been created)
 # class JSONWriter:
 #
 #     def __init__(self):
@@ -64,14 +64,23 @@ class DBWriter:
 #         json_list = []
 #         for i in item:
 #             output.append(item)
-#         for list in output:
-#             json_list.extend(output)
-#         print(json_list)
-#         print(type(json_list))
-#
-#         # json.dumps(json_list, ensure_ascii=False, indent=6)
+
 #         json.dump(json_list, self._file, ensure_ascii=False, indent=6)
-#         # for j in json_data:
-#         #     json_list.append(parse(json_data))
-#         # print(json_data)
-#         # self._file.write(json_list)
+
+
+class JSONWriter:
+
+    def get_json_data(self):
+        con = sqlite3.connect('./jobs.db')
+        con.row_factory = sqlite3.Row  # This enables column access by name: row['column_name']
+        db = con.cursor()
+
+        rows = db.execute('SELECT * from jobs').fetchall()
+
+        con.commit()
+        con.close()
+
+        with open("results.json", "w", encoding='utf-8') as f:
+            json.dump([dict(ix) for ix in rows], f, ensure_ascii=False, indent=7)
+
+        return print("JSON file is created")
