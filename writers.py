@@ -33,6 +33,7 @@ class DBWriter:
     def write(self, item):
         con = sqlite3.connect('./jobs.db')
         cur = con.cursor()
+
         sql_create_jobs = """
             CREATE TABLE IF NOT EXISTS jobs
             (id INTEGER PRIMARY KEY,
@@ -43,12 +44,15 @@ class DBWriter:
             href VARCHAR(50),
             job_description VARCHAR(10000));
             """
-        # It should be create an ability to delete data from user and data from phones will be deleted by cascade
         # Create table
         cur.execute(sql_create_jobs)
+
         con.commit()
+
         sql_insert_value_in_users = f"INSERT INTO jobs values (null,'{item['id']}', '{item['title']}', '{item['job_title']}', '{item['payment']}', '{item['href']}','{item['job_description']}');"
+        # Insert data into table
         cur.execute(sql_insert_value_in_users)
+
         con.commit()
         con.close()
 

@@ -79,5 +79,6 @@ while True:
 
         # file.write(f"{job_info['href']} {job_info['title']} {job_info['id']}\n")
         # result.append(job_info)
+
 JSONwr = JSONWriter()
 JSONwr.get_json_data()
