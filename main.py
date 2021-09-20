@@ -2,8 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-from writers import TxtWriter, CSVWriter
-
+from writers import TxtWriter, CSVWriter, DBWriter
 
 ROOT = 'https://www.work.ua'
 
@@ -16,6 +15,7 @@ page = 0
 writers_list = [
     TxtWriter(),
     CSVWriter(),
+    DBWriter(),
 ]
 
 while True:
@@ -25,6 +25,8 @@ while True:
     params = {
         'page': page,
     }
+    if page == 2:
+        break
 
     response = requests.get(full_url, params=params)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -61,19 +63,21 @@ while True:
 
         job_description_raw = job_details_container.find('div', {'id': 'job-description'})
         children = job_description_raw.findChildren("p")
-        job_description = children[0].get_text()
+        job_description_str = children[0].get_text()
+        job_description = job_description_str.translate({ord("'"): None})
 
         job_info = {
             'href': href,
             'title': title,
             'id': id_,
-            'Job Title': job_title,
+            'job_title': job_title,
             'payment': payment,
             'job_description': job_description,
         }
-
         for writer in writers_list:
             writer.write(job_info)
+        print(job_info["job_description"])
+        print(type(job_info["job_description"]))
 
         # file.write(f"{job_info['href']} {job_info['title']} {job_info['id']}\n")
         # result.append(job_info)
